@@ -1,6 +1,7 @@
 package br.gov.inst.atlan.kafkabus.listeners;
 
 import br.gov.inst.atlan.kafkabus.events.EmailEvent;
+import br.gov.inst.atlan.kafkabus.repositories.AdminUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -20,6 +21,9 @@ public class EmailListener implements RabbitListenerConfigurer {
 
     @Autowired
     private KafkaTemplate<String, EmailEvent> producer;
+
+    @Autowired
+    private AdminUserRepository adminUserRepository;
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar rabbitListenerEndpointRegistrar) {
@@ -43,5 +47,11 @@ public class EmailListener implements RabbitListenerConfigurer {
     public void listen(EmailEvent emailEvent) {
         log.info("Recebendo email do kafka: {}", emailEvent);
 
+        log.info("Encontrando todos administradores");
+        this.adminUserRepository.findAll().forEach(user -> {
+            log.info("Enviando email para {}", user.getId());
+        });
+
+        log.info("Enviando email para usuário do evento recebido: {}", emailEvent.getUserId());
     }
 }
