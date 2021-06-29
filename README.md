@@ -16,6 +16,8 @@ O projeto usa o redis para pegar do cache os usuários que são administradores 
 * O objeto de evento, assim como o repository/POJO que acessa o redis para pegar o cache poderia ficar
 em um projeto separado, já que serviria para todos os micro serviços
   
+* Melhorar logs da aplicação
+* Colocar javaDocs em alguns métodos
 * Implementar testes da aplicação
   
 ## Rodando o projeto
